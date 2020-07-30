@@ -18,6 +18,13 @@ pipenv install smooch_logs
 ## Usage
 
 ```python
+import logging
+
+from smooch_logs import SmoochWebSession
+from smooch_logs import SmoochLogsDownloader
+
+logger = logging.getLogger(__name__)
+
 with SmoochWebSession() as session:
     r = session.get(f'{SMOOCH_BASE_URL}/webapi/apps?limit=999')
     r.raise_for_status()
