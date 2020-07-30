@@ -38,6 +38,6 @@ During development, it can be convenient to specify an existing session ID for t
 ```python
 SmoochWebSession(session_id='xxx', logout=False)
 ```
-The `SmoochWebSession` object automatically checks for session validity and re-logins if necessary.
+The [`SmoochWebSession`](smooch_logs/session.py) object automatically checks for session validity and re-logins if necessary.
 
 The [`SmoochLogsDownloader`](smooch_logs/downloader.py) is a convenience class for downloading Smooch logs for a particular application.
