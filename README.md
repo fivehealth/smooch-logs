@@ -13,14 +13,10 @@ We obtain login credentials for Smooch using a Selenium with a Chromium headless
 
 ```python
 with SmoochWebSession() as session:
-    if A.apps:
-        app_ids = A.apps
-    else:
-        r = session.get(f'{SMOOCH_BASE_URL}/webapi/apps?limit=999')
-        r.raise_for_status()
+    r = session.get(f'{SMOOCH_BASE_URL}/webapi/apps?limit=999')
+    r.raise_for_status()
 
-        app_ids = [d['_id'] for d in r.json()['apps']]
-    #end if
+    app_ids = [d['_id'] for d in r.json()['apps']]
 
     logger.info(f'Found {len(app_ids)} Smooch applications.')
 
@@ -31,12 +27,9 @@ with SmoochWebSession() as session:
         logger.info(f'Downloading logs for "{r.json()["name"]}" <{app_id}> from Smooch.')
 
         for event in downloader.download(app_id, start=A.start, end=A.end):
-            A.output.write(json.dumps(event))
-            A.output.write('\n')
+            print(json.dumps(event))
         #end for
     #end for
-
-    A.output.close()
 #end with
 ```
 
