@@ -1,5 +1,11 @@
 # Smooch Logs Downloader
 
+[![PyPI version](https://img.shields.io/pypi/v/smooch_logs.svg)](https://pypi.python.org/pypi/smooch_logs/)
+[![PyPI license](https://img.shields.io/pypi/l/smooch_logs.svg)](https://pypi.python.org/pypi/smooch_logs/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/smooch_logs.svg)](https://pypi.python.org/pypi/smooch_logs/)
+[![PyPI status](https://img.shields.io/pypi/status/smooch_logs.svg)](https://pypi.python.org/pypi/smooch_logs/)
+[![PyPI download total](https://img.shields.io/pypi/dm/smooch_logs.svg)](https://pypi.python.org/pypi/smooch_logs/)
+
 This is a simple module for downloading Smooch logs from their website.
 We obtain login credentials for Smooch using a Selenium with a Chromium headless browser.
 
