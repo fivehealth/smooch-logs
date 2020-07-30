@@ -1,6 +1,6 @@
 # Smooch Logs Downloader
 
-This is a simple module for download Smooch logs from their website.
+This is a simple module for downloading Smooch logs from their website.
 We obtain login credentials for Smooch using a Selenium with a Chromium headless browser.
 
 ## Example
