@@ -101,6 +101,7 @@ def main():
         logger.info(f'Found {len(app_ids)} Smooch applications.')
 
         downloader = SmoochLogsDownloader(session)
+        count = 0
         for app_id in app_ids:
             r = session.get(f'{SMOOCH_BASE_URL}/webapi/apps/{app_id}')
             r.raise_for_status()
@@ -109,10 +110,15 @@ def main():
             for event in downloader.download(app_id, start=A.start, end=A.end):
                 A.output.write(json.dumps(event))
                 A.output.write('\n')
+                count += 1
+
+                if count % 10000 == 0:
+                    logger.info(f'Saved {count} events to <{A.output.name}>.')
             #end for
         #end for
 
         A.output.close()
+        logger.info(f'Saved {count} events to <{A.output.name}>.')
     #end with
 #end def
 
