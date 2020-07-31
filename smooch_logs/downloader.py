@@ -51,10 +51,12 @@ class SmoochLogsDownloader():
 
                 yield event
 
-                if least_recent_event is None or least_recent_event['timestamp'] < event['timestamp']:
+                if least_recent_event is None or event['timestamp'] < least_recent_event['timestamp']:
                     least_recent_event = event
-                if most_recent_event is None or most_recent_event['timestamp'] > event['timestamp']:
+
+                if most_recent_event is None or event['timestamp'] > most_recent_event['timestamp']:
                     most_recent_event = event
+
                 count += 1
 
                 if count % 10000 == 0:
@@ -77,8 +79,8 @@ class SmoochLogsDownloader():
 def main():
     parser = ArgumentParser(description='Download Smooch logs for given application ID.')
     parser.add_argument('-A', '--apps', type=str, nargs='+', required=False, metavar='app_id', help='Smooch App IDs to download logs for. Defaults to all apps.')
-    parser.add_argument('--start', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs after this date (ISO date time format; default = all logs available which is ~30 days)')
-    parser.add_argument('--end', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs before this date (ISO date time format; default = now).')
+    parser.add_argument('--start', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs after this date/time (ISO date time format; default = all logs available which is ~30 days)')
+    parser.add_argument('--end', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs before this date/time (ISO date time format; default = now).')
     parser.add_argument('-o', '--output', type=URIFileType('w'), metavar='uri', required=True, help='Dump logs to this URI.')
     A = parser.parse_args()
 
@@ -112,7 +114,7 @@ def main():
                 A.output.write('\n')
                 count += 1
 
-                if count % 10000 == 0:
+                if count % 50000 == 0:
                     logger.info(f'Saved {count} events to <{A.output.name}>.')
             #end for
         #end for
