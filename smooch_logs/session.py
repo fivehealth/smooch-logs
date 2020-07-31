@@ -30,11 +30,10 @@ SMOOCH_BASE_URL = os.environ.get('SMOOCH_BASE_URL', 'https://app.smooch.io')
 class SmoochWebSession():
     WAIT_TIMEOUT = 10
 
-    def __init__(self, chrome_binary_location=None, username=None, password=None, session_id=None, logout=True):
+    def __init__(self, username=None, password=None, session_id=None, logout=True):
         self.username = username or os.environ['SMOOCH_USERNAME']
         self.password = password or os.environ['SMOOCH_PASSWORD']
 
-        self.chrome_binary_location = chrome_binary_location
         self.session_id = session_id
         self.logout = logout
     #end def
