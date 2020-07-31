@@ -24,7 +24,7 @@ else:
     CHROME_BINARY_LOCATION = None
 #end if
 
-SMOOCH_BASE_URL = 'https://app.smooch.io'
+SMOOCH_BASE_URL = os.environ.get('SMOOCH_BASE_URL', 'https://app.smooch.io')
 
 
 class SmoochWebSession():
@@ -68,8 +68,11 @@ class SmoochWebSession():
             logger.debug(f'Using <{temp_dir}> as temporary directory for chrome.')
 
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.binary_location = self.chrome_binary_location or os.environ.get('CHROME_BINARY_LOCATION') or CHROME_BINARY_LOCATION
-            logger.debug(f'Chrome binary location is <{chrome_options.binary_location}>.')
+            chrome_binary_location = self.chrome_binary_location or os.environ.get('CHROME_BINARY_LOCATION') or CHROME_BINARY_LOCATION
+            if chrome_binary_location:
+                chrome_options.binary_location = chrome_binary_location
+                logger.debug(f'Chrome binary location set to <{chrome_options.binary_location}>.')
+            #end if
 
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('--no-sandbox')
