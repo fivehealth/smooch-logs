@@ -28,6 +28,8 @@ SMOOCH_BASE_URL = 'https://app.smooch.io'
 
 
 class SmoochWebSession():
+    WAIT_TIMEOUT = 10
+
     def __init__(self, chrome_binary_location=None, username=None, password=None, session_id=None, logout=True):
         self.username = username or os.environ['SMOOCH_USERNAME']
         self.password = password or os.environ['SMOOCH_PASSWORD']
@@ -96,9 +98,8 @@ class SmoochWebSession():
                 elem.send_keys(self.password)
                 elem.send_keys(Keys.RETURN)
 
-                # elem = WebDriverWait(driver, 10).until(presence_of_element_located((By.PARTIAL_LINK_TEXT, self.username)))
-                elem = WebDriverWait(driver, 10).until(presence_of_element_located((By.XPATH, f'//a/small[contains(text(),"{self.username}")]')))
-                elem = WebDriverWait(driver, 10).until(presence_of_element_located((By.XPATH, '//*[text()="Create new app"]')))
+                elem = WebDriverWait(driver, self.WAIT_TIMEOUT).until(presence_of_element_located((By.XPATH, f'//a/small[contains(text(),"{self.username}")]')))
+                elem = WebDriverWait(driver, self.WAIT_TIMEOUT).until(presence_of_element_located((By.XPATH, '//*[text()="Create new app"]')))
                 logger.info(f'Login for <{self.username}> successful.')
                 # logger.debug(f'Cookies are: {driver.get_cookies()}')
 
