@@ -6,7 +6,7 @@ README = open(os.path.join(here, 'README.md')).read()
 
 setup(
     name='smooch_logs',
-    version='0.1.5',
+    version='0.1.6',
     packages=['smooch_logs'],
     description='Simple module for downloading Smooch logs from their website.',
     long_description=README,
@@ -28,8 +28,6 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 3',
-        'Framework :: Django',
-        'Framework :: Flask',
         'License :: OSI Approved :: MIT License',
     ],
 )
