@@ -12,10 +12,9 @@ from pytz import UTC
 from uriutils import URIFileType
 
 from .session import SmoochWebSession
+from .session import SMOOCH_BASE_URL
 
 logger = logging.getLogger(__name__)
-
-SMOOCH_BASE_URL = 'https://app.smooch.io'
 
 
 class SmoochLogsDownloader():

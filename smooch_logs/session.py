@@ -1,4 +1,4 @@
-__all__ = ['SmoochWebSession']
+__all__ = ['SmoochWebSession', 'SMOOCH_BASE_URL']
 
 import logging
 from tempfile import TemporaryDirectory
