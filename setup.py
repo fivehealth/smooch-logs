@@ -13,7 +13,7 @@ setup(
     long_description_content_type='text/markdown',
     author='5 Health Inc',
     author_email='hello@botmd.io',
-    url='https://github.com/fivehealth/smooch-logs-downloader',
+    url='https://github.com/fivehealth/smooch-logs',
     license='MIT License',
     install_requires=[
         'selenium',
