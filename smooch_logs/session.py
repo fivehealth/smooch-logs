@@ -14,14 +14,14 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
 
-from webdriver_manager.chrome import ChromeDriverManager
-
 logger = logging.getLogger(__name__)
 
-if platform.system() == 'Darwin':
-    CHROME_BINARY_LOCATION = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+if platform.system() in ['Darwin']:
+    from webdriver_manager.chrome import ChromeDriverManager
+    CHROME_DRIVER_LOCATION = ChromeDriverManager().install()
+
 else:
-    CHROME_BINARY_LOCATION = None
+    CHROME_DRIVER_LOCATION = 'chromedriver'
 #end if
 
 SMOOCH_BASE_URL = os.environ.get('SMOOCH_BASE_URL', 'https://app.smooch.io')
@@ -68,28 +68,14 @@ class SmoochWebSession():
             logger.debug(f'Using <{temp_dir}> as temporary directory for chrome.')
 
             chrome_options = webdriver.ChromeOptions()
-            chrome_binary_location = self.chrome_binary_location or os.environ.get('CHROME_BINARY_LOCATION') or CHROME_BINARY_LOCATION
-            if chrome_binary_location:
-                chrome_options.binary_location = chrome_binary_location
-                logger.debug(f'Chrome binary location set to <{chrome_options.binary_location}>.')
-            #end if
 
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument(f'--user-data-dir={os.path.join(temp_dir, "user_data_dir")}')
             chrome_options.add_argument('--enable-logging')
-            chrome_options.add_argument('--log-level=0')
-            chrome_options.add_argument('--v=99')
             chrome_options.add_argument('--single-process')
-            chrome_options.add_argument(f'--data-path={os.path.join(temp_dir, "data_dir")}')
-            chrome_options.add_argument('--ignore-certificate-errors')
-            chrome_options.add_argument(f'--homedir={temp_dir}')
-            chrome_options.add_argument(f'--disk-cache-dir={os.path.join(temp_dir, "cache_dir")}')
-            chrome_options.add_argument('user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36')
-            chrome_options.add_argument('--window-size=1280x1024')
 
-            with webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options) as driver:
+            with webdriver.Chrome(executable_path=CHROME_DRIVER_LOCATION, options=chrome_options) as driver:
                 driver.get(SMOOCH_BASE_URL)
 
                 elem = driver.find_element_by_name('email')
