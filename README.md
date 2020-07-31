@@ -17,6 +17,34 @@ pipenv install smooch_logs
 
 ## Usage
 
+### CLI
+
+You use the `smooch_logs.downloader` script to directly download Smooch logs from thr CLI.
+
+```bash
+$ python -m smooch_logs.downloader --help                                                                                                <aws:botmd>
+
+usage: downloader.py [-h] [-A app_id [app_id ...]] [--start date] [--end date] -o uri
+
+Download Smooch logs for given application ID.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -A app_id [app_id ...], --apps app_id [app_id ...]
+                        Smooch App IDs to download logs for. Defaults to all apps.
+  --start date          Dump logs after this date/time (ISO date time format; default = all logs available which is ~30 days)
+  --end date            Dump logs before this date/time (ISO date time format; default = now).
+  -o uri, --output uri  Dump logs to this URI.
+```
+
+For example, to download logs for all apps in the last 3 days,
+
+```bash
+python -m smooch_logs.downloader --start `date --utc --iso-8601 --date="3 days ago"` -o last_3_days.json
+```
+
+### Module
+
 ```python
 import logging
 
