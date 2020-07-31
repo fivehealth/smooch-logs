@@ -12,4 +12,6 @@ ENV OUTPUT_URI=/code/downloaded.json
 
 COPY download_last_3_days.sh /code/download_last_3_days.sh
 
-CMD ["/code/download_last_3_days.sh"]
+ENV PATH="/code:${PATH}"
+
+CMD ["download_last_3_days.sh"]
