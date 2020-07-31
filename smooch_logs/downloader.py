@@ -4,8 +4,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 import json
 import logging
-
-from dateutil.parser import isoparse
+import os
 
 from pytz import UTC
 
@@ -34,6 +33,7 @@ class SmoochLogsDownloader():
         start_date_timestamp, end_date_timestamp = datetime.timestamp(start_datetime), datetime.timestamp(end_datetime)
 
         done, count = False, 0
+        least_recent_event, most_recent_event = None, None
         while not done:
             r = session.get(f'{SMOOCH_BASE_URL}/webapi/apps/{app_id}/logs', params=dict(before=end_date_timestamp))
             r.raise_for_status()
@@ -50,17 +50,23 @@ class SmoochLogsDownloader():
                 #end if
 
                 yield event
+
+                if least_recent_event is None or least_recent_event['timestamp'] < event['timestamp']:
+                    least_recent_event = event
+                if most_recent_event is None or most_recent_event['timestamp'] > event['timestamp']:
+                    most_recent_event = event
                 count += 1
 
                 if count % 10000 == 0:
-                    logger.debug(f'Downloaded {count} entries for <{app_id}> since {datetime.fromtimestamp(event["timestamp"]).isoformat()}.')
+                    logger.debug(f'Downloaded {count} entries for <{app_id}> since {datetime.utcfromtimestamp(least_recent_event["timestamp"]).isoformat()}.')
+                #end if
             #end for
 
             end_date_timestamp = response['events'][-1]['timestamp']
         #end while
 
         if count:
-            logger.info(f'Downloaded {count} entries for <{app_id}> since {datetime.fromtimestamp(event["timestamp"]).isoformat()}.')
+            logger.info(f'Downloaded {count} entries for <{app_id}> ({datetime.utcfromtimestamp(least_recent_event["timestamp"]).isoformat()} to {datetime.utcfromtimestamp(most_recent_event["timestamp"]).isoformat()}).')
         else:
             logger.info(f'There are no log entries available to download for <{app_id}>.')
         #end if
@@ -70,13 +76,13 @@ class SmoochLogsDownloader():
 
 def main():
     parser = ArgumentParser(description='Download Smooch logs for given application ID.')
-    parser.add_argument('-A', '--apps', type=str, nargs='+', required=False, help='Smooch App IDs to download logs for. Defaults to all apps.')
-    parser.add_argument('--start', type=isoparse, default=None, help='Dump logs after this date (ISO date time format; default = all logs available which is ~30 days)')
-    parser.add_argument('--end', type=isoparse, default=None, help='Dump logs before this date (ISO date time format; default = now).')
-    parser.add_argument('-o', '--output', type=URIFileType('w'), required=True, help='Dump logs to this URI.')
+    parser.add_argument('-A', '--apps', type=str, nargs='+', required=False, metavar='app_id', help='Smooch App IDs to download logs for. Defaults to all apps.')
+    parser.add_argument('--start', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs after this date (ISO date time format; default = all logs available which is ~30 days)')
+    parser.add_argument('--end', type=datetime.fromisoformat, default=None, metavar='date', help='Dump logs before this date (ISO date time format; default = now).')
+    parser.add_argument('-o', '--output', type=URIFileType('w'), metavar='uri', required=True, help='Dump logs to this URI.')
     A = parser.parse_args()
 
-    logging.basicConfig(format='%(asctime)-15s [%(name)s-%(process)d] %(levelname)s: %(message)s', level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)-15s [%(name)s-%(process)d] %(levelname)s: %(message)s', level=os.environ.get('LOG_LEVEL', 'INFO'))
 
     logging.getLogger('urllib3').setLevel(logging.WARNING)
     logging.getLogger('selenium').setLevel(logging.INFO)

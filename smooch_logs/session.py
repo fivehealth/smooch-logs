@@ -38,6 +38,8 @@ class SmoochWebSession():
     #end def
 
     def __enter__(self):
+        self._session = None
+
         if self.session_id:
             session = requests.Session()
             session.headers.update({
@@ -133,7 +135,7 @@ class SmoochWebSession():
             logger.warning('HTTPError while logging out.')
 
         else:
-            logger.debug(f'Session logout successful.')
+            logger.info(f'Smooch session logout successful.')
         #end try
 
         self._session = None
