@@ -5,7 +5,7 @@ ENV CHROME_BINARY_LOCATION=/usr/local/bin/chrome
 
 RUN apk add --update coreutils && \
     rm -rf /var/cache/apk/* && \
-    pip install smooch_logs
+    pip install boto3 smooch_logs
 
 # location to save downloaded file
 ENV OUTPUT_URI=/code/downloaded.json
