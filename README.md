@@ -22,6 +22,7 @@ import logging
 
 from smooch_logs import SmoochWebSession
 from smooch_logs import SmoochLogsDownloader
+from smooch_logs import SMOOCH_BASE_URL
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +55,11 @@ SmoochWebSession(session_id='xxx', logout=False)
 The [`SmoochWebSession`](smooch_logs/session.py) object automatically checks for session validity and re-logins if necessary.
 
 The [`SmoochLogsDownloader`](smooch_logs/downloader.py) is a convenience class for downloading Smooch logs for a particular application.
+
+
+## Docker
+
+The [Dockerfile](Dockerfile) included in this repository contains the necessary to run the Python download script.
+It currently comes with a [shell script to download the last 3 days of logs](download_last_3_days.sh) for all Smooch applications and save them to the URI specified in environment variable `OUTPUT_URI`.
+This is currently used by the authors in a daily job to download logs.
+Feel free to modify as necessary for your use case.
